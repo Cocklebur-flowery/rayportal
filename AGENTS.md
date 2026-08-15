@@ -365,7 +365,12 @@ Project、Backend Settings 和 Job Manifest 是稳定持久化契约：
 - 一个提交只包含一个可独立验证的责任、契约或阶段。
 - 不混入用户或其他任务的工作。
 - 不把只有接口、UI 或占位实现的功能声明为完成。
-- 提交说明和交接必须记录实际验证与已知限制。
+- 提交信息遵循 [Git 提交信息规范](docs/commit-conventions.md)，并使用仓库根目录 `.gitmessage` 作为语义模板。
+- 标题使用 `<type>(<scope>): <imperative summary>`；普通功能、修复、重构和构建提交至少记录 `Why`、`Changes` 与 `Validation`。
+- 稳定契约、持久化、线程、Minecraft Hook、Backend、输出安全或兼容性变化使用高风险模板，同时记录契约、风险、手工验证和已知限制。
+- 验证项只使用 `PASS`、`FAIL`、`KNOWN RED`、`BLOCKED` 或 `NOT RUN`，并记录实际命令/流程与证据；不得把未执行验证写成通过。
+- 提交说明和交接必须一致，不得在 commit message 中扩大已验证范围。
+- 提交后重新检查作者、正文、文件清单和工作树。
 
 禁止使用破坏性 Git 操作来制造干净工作树。
 

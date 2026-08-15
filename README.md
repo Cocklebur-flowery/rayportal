@@ -23,6 +23,7 @@ RayPortal 是面向 Minecraft 26.2+ / NeoForge 的独立镜头编排与离线渲
 
 - [正式架构规范](docs/architecture.md)：后续设计与实现的规范性基线。
 - [精密开发路线图](docs/development-roadmap.md)：从纯核心到 Cycles、OSL 与生产发布的分阶段实施顺序。
+- [Git 提交信息规范](docs/commit-conventions.md)：分级标题、正文、验证证据与高风险契约模板。
 - [基础调查与架构边界](docs/architecture-investigation.md)：Aperture、Minema、BBS 与 Blender 工作流的调研依据。
 
 ## 当前边界

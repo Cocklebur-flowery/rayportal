@@ -1,0 +1,54 @@
+# <type>(<scope>): <imperative summary>
+#
+# Subject rules:
+# - Use an allowed type and the narrowest useful scope.
+# - Describe one coherent outcome, not a file list or work log.
+# - Use imperative English, no trailing period, preferably <= 72 characters.
+#
+# Standard body (required for normal feature/fix/refactor/build work):
+#
+# Why:
+# - Explain the problem, requirement, or invariant that caused this change.
+#
+# Changes:
+# - Describe the observable behavior or owned responsibility that changed.
+# - Mention important lifecycle or failure-path behavior.
+#
+# Validation:
+# - PASS `<command>` — state what it proved.
+# - NOT RUN `<check>` — state the exact reason.
+#
+# High-risk additions (required for stable contracts, persistence, threading,
+# Minecraft hooks, rendering backends, output safety, or compatibility):
+#
+# Contracts:
+# - Name changed or deliberately preserved APIs, schemas, IDs, revisions,
+#   state transitions, thread ownership, resource ownership, or file formats.
+#
+# Compatibility / Risks:
+# - State migration, fallback, optional dependency, and rollback behavior.
+#
+# Manual verification:
+# - PASS `<workflow>` — summarize observed runtime evidence.
+# - NOT RUN `<workflow>` — state the exact reason.
+#
+# Known limitations:
+# - List remaining limitations without claiming unfinished work is complete.
+#
+# Roadmap:
+# - Pxx-Wyy
+#
+# Optional footers (only when true):
+# Refs: <issue, decision, or document>
+# BREAKING CHANGE: <impact and migration>
+# Co-authored-by: <actual contributor name> <verified email>
+#
+# Allowed types:
+# feat fix perf refactor test docs build ci chore revert
+#
+# Common scopes:
+# time project timeline camera capture application editor persistence runtime
+# world render vanilla cycles diagnostics build repo docs
+#
+# Remove unused sections. Never claim PASS for a check that was not run.
+# See docs/commit-conventions.md for message levels, examples, and full rules.
