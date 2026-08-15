@@ -1,0 +1,24 @@
+### Gradle ###
+.gradle/
+.tools/
+.deps/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### IDEs ###
+.idea/
+*.iml
+out/
+.run/
+.vscode/
+
+### Minecraft runtime ###
+run/
+repo/
+
+### Generated resources ###
+src/generated/**/.cache/
+
+### OS ###
+.DS_Store
+Thumbs.db
