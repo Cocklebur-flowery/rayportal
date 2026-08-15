@@ -1,14 +1,18 @@
 # RayPortal Git 提交信息规范
 
-> 规范版本：0.1
+> 规范版本：0.2
 >
 > 状态：仓库级提交规范
 >
 > 最后更新：2026-08-16
+>
+> 生效边界：适用于 `9a7290d` 之后的新提交；不追溯整改既有历史。
 
 本文规定 RayPortal 的 Git commit message 如何表达变更目的、责任边界、验证证据和兼容性。目标不是让每个提交都写成长报告，而是让未来开发者仅查看 Git 历史，就能判断一个变更为什么存在、改变了什么、验证到了哪一步，以及哪些风险仍然开放。
 
 本规范与仓库根目录的 [工程开发约束](../AGENTS.md) 配合使用。`.gitmessage` 是编辑器提示模板；本文是其语义来源。
+
+未来的自动检查只能验证本次 push/PR 新增的提交，或调用者显式给定且不早于上述边界的提交区间。不得为了启用新规则而扫描全部历史、要求历史提交通过或重写已有历史。
 
 ## 1. 核心原则
 
@@ -71,14 +75,14 @@ BREAKING CHANGE: <impact and migration>
 
 ### 3.1 Level S：简短提交
 
-只保留标题。仅当以下条件全部满足时使用：
+只保留标题。仅用于无语义的文档、拼写、注释或格式变更，且以下条件全部满足：
 
 - 变更显然且范围很小。
 - 不改变运行行为、公共 API、Schema、稳定 ID、依赖或生命周期。
 - 不需要解释特殊验证或未验证项。
 - 不涉及 Minecraft Hook、线程、文件写入、Backend 或兼容性。
 
-适用示例：拼写修正、链接修正、纯注释修正、无语义格式修正。
+适用示例：拼写修正、链接标签修正、纯注释修正、无语义格式修正。即使 type 是 `docs`、`chore` 或 `ci`，只要改变了规则、构建、流程或可观察语义，就不属于 Level S。
 
 ```text
 docs(readme): fix roadmap link label
@@ -88,7 +92,7 @@ docs(readme): fix roadmap link label
 
 ### 3.2 Level M：标准提交
 
-这是默认级别，适用于普通功能、修复、测试、重构和构建工作。
+这是默认级别。除明确符合 Level S 或必须升级为 Level H 的变更外，其他普通提交均使用 Level M，不按 type 枚举例外。
 
 必须包含：
 
@@ -309,7 +313,7 @@ Contracts:
 
 ### 7.4 Validation
 
-每一项都使用状态、实际命令或检查以及它证明的内容：
+每一项都使用状态、可复现的实际命令或有据可查的命名流程，以及它证明的内容：
 
 ```text
 Validation:
@@ -323,6 +327,10 @@ Validation:
 规则：
 
 - 只记录实际执行结果。
+- 临时或一次性检查必须写出实际命令，不得以“structure check”、“link checks”等描述代替。
+- 命名测试流程只有在仓库文档中存在可查找的命令定义时才可使用；提交正文应指明流程名和文档位置。
+- 命令与日志位置使用仓库相对路径，不记录用户名、绝对主目录、Token、凭据、设备序列号或其他敏感信息。
+- 大段日志只摘要首个可行动错误和仓库相对日志位置，不将整段输出复制到提交正文。
 - `PASS build` 不等于运行时通过。
 - `PASS runClient` 必须说明实际操作了什么。
 - `FAIL` 不得被较宽泛的 PASS 覆盖。
@@ -384,13 +392,16 @@ Roadmap:
 
 ## 9. Revert 与修复提交
 
-Revert 应保留 Git 自动生成的目标提交信息，并在必要时补充：
+Revert 也必须使用统一标题格式 `revert(<scope>): <imperative summary>`。`git revert` 自动生成的 `Revert "..."` 只能作为编辑草稿，不得作为最终标题。正文必须保留被撤销提交的完整 hash：
 
 ```text
-Revert "feat(camera): apply physical lens overrides"
+revert(camera): restore default projection behavior
 
 Why:
 - The change regressed Minecraft projection when physical lens mode was off.
+
+Changes:
+- Revert the physical lens override while preserving unrelated camera fixes.
 
 Validation:
 - PASS `./gradlew test --tests '*CameraProjectionTest'` — restored the

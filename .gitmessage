@@ -5,7 +5,12 @@
 # - Describe one coherent outcome, not a file list or work log.
 # - Use imperative English, no trailing period, preferably <= 72 characters.
 #
-# Standard body (required for normal feature/fix/refactor/build work):
+# Level S: title only, and only for non-semantic docs, spelling, comments,
+# or formatting changes. Level M: default for every other ordinary commit.
+# Level H: stable contracts, lifecycle, visuals, performance, compatibility,
+# or the high-risk areas listed below.
+#
+# Standard body (required for every Level M and Level H commit):
 #
 # Why:
 # - Explain the problem, requirement, or invariant that caused this change.
@@ -17,6 +22,12 @@
 # Validation:
 # - PASS `<command>` — state what it proved.
 # - NOT RUN `<check>` — state the exact reason.
+# - Use the actual reproducible command for one-off checks. A named workflow
+#   must have a discoverable command definition in repository documentation.
+# - Use repository-relative paths. Do not record usernames, absolute home
+#   paths, tokens, credentials, device serials, or other sensitive data.
+# - Summarize only the first actionable error and repository-relative log path;
+#   do not paste large logs into the message.
 #
 # High-risk additions (required for stable contracts, persistence, threading,
 # Minecraft hooks, rendering backends, output safety, or compatibility):
@@ -45,6 +56,8 @@
 #
 # Allowed types:
 # feat fix perf refactor test docs build ci chore revert
+# Revert title: revert(<scope>): <imperative summary>
+# Revert footer: Reverts: <full commit hash>
 #
 # Common scopes:
 # time project timeline camera capture application editor persistence runtime

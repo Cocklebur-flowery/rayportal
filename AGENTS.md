@@ -366,9 +366,11 @@ Project、Backend Settings 和 Job Manifest 是稳定持久化契约：
 - 不混入用户或其他任务的工作。
 - 不把只有接口、UI 或占位实现的功能声明为完成。
 - 提交信息遵循 [Git 提交信息规范](docs/commit-conventions.md)，并使用仓库根目录 `.gitmessage` 作为语义模板。
-- 标题使用 `<type>(<scope>): <imperative summary>`；普通功能、修复、重构和构建提交至少记录 `Why`、`Changes` 与 `Validation`。
-- 稳定契约、持久化、线程、Minecraft Hook、Backend、输出安全或兼容性变化使用高风险模板，同时记录契约、风险、手工验证和已知限制。
-- 验证项只使用 `PASS`、`FAIL`、`KNOWN RED`、`BLOCKED` 或 `NOT RUN`，并记录实际命令/流程与证据；不得把未执行验证写成通过。
+- 所有标题使用 `<type>(<scope>): <imperative summary>`，包括 `revert`；Revert 正文使用 `Reverts: <full hash>` 标识目标。
+- Level S 仅用于无语义的文档、拼写、注释或格式变更，可只保留标题。
+- Level M 是其他普通提交的默认级别，不按 type 枚举例外，必须至少记录 `Why`、`Changes` 与 `Validation`。
+- Level H 用于稳定契约、生命周期、持久化、线程、Minecraft Hook、Backend、画面、性能、输出安全或兼容性变化，同时记录契约、风险、手工验证和已知限制。
+- 验证项只使用 `PASS`、`FAIL`、`KNOWN RED`、`BLOCKED` 或 `NOT RUN`，并记录仓库相对、可复现且已脱敏的实际命令/流程与证据；不得把未执行验证写成通过。
 - 提交说明和交接必须一致，不得在 commit message 中扩大已验证范围。
 - 提交后重新检查作者、正文、文件清单和工作树。
 
