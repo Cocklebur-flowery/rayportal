@@ -31,6 +31,69 @@ tasks.named('test') {
     useJUnitPlatform()
 }
 
+def coreSourceRoot = layout.projectDirectory.dir('src/main/java/dev/rayportal/core')
+def forbiddenCoreImportPrefixes = [
+    'net.minecraft.',
+    'net.neoforged.',
+    'java.io.',
+    'java.net.',
+    'java.nio.channels.',
+    'java.nio.file.',
+    'java.awt.',
+    'javax.swing.',
+    'org.lwjgl.',
+    'imgui.'
+]
+
+tasks.register('checkCoreBoundaries') {
+    group = 'verification'
+    description = 'Checks that core sources do not import platform, GUI, IO, or Cycles types.'
+    inputs.dir(coreSourceRoot)
+
+    doLast {
+        def sourceRoot = coreSourceRoot.asFile
+        if (!sourceRoot.exists()) {
+            logger.lifecycle('No core source directory exists; boundary check has nothing to inspect.')
+            return
+        }
+
+        def violations = []
+        fileTree(sourceRoot).matching { include '**/*.java' }.files
+                .sort { left, right -> project.relativePath(left) <=> project.relativePath(right) }
+                .each { sourceFile ->
+                    sourceFile.eachLine { line, lineNumber ->
+                        def trimmed = line.trim()
+                        if (trimmed.startsWith('import ')) {
+                            def importedType = trimmed
+                                    .substring('import '.length())
+                                    .replaceFirst('^static\\s+', '')
+                                    .replaceFirst(';\\s*$', '')
+                            def lowerImportedType = importedType.toLowerCase(Locale.ROOT)
+                            def forbiddenPrefix = forbiddenCoreImportPrefixes.find {
+                                importedType.startsWith(it)
+                            }
+
+                            if (forbiddenPrefix != null || lowerImportedType.contains('cycles')) {
+                                violations << "${project.relativePath(sourceFile)}:${lineNumber} imports '${importedType}'"
+                            }
+                        }
+                    }
+                }
+
+        if (!violations.isEmpty()) {
+            throw new GradleException(
+                    'core.* boundary violations found:\n- ' + violations.join('\n- ')
+            )
+        }
+
+        logger.lifecycle('core.* boundary check passed.')
+    }
+}
+
+tasks.named('check') {
+    dependsOn tasks.named('checkCoreBoundaries')
+}
+
 neoForge {
     version = neo_version
 
